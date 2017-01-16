@@ -338,13 +338,12 @@ minetest.register_craftitem('easter:egg_night', {
 	description = 'Easter Egg Night',
 	inventory_image = 'easter_egg_night.png',
 	groups = {not_in_creative_inventory = 1,},
-	-- code for night function modified from Lightcorrect mod by mootpoint
 	on_use = function(itemstack, user)
-		local light = (minetest.get_timeofday()*2)
-		if light < 0.47 then
-			user:override_day_night_ratio((light)+0.4)
+		local light = (minetest.get_timeofday())
+		if light < 0.2 or light > 0.8 then
+			user:override_day_night_ratio((1))
 		else
-			user:override_day_night_ratio((light)-0.4)
+			user:override_day_night_ratio((0))
 		end
 		itemstack:take_item()
 		return itemstack
