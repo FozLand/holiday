@@ -47,15 +47,15 @@ local randomegg = function()
 		rarity = 25
 	end
 
-	local roll = math.random(0,rarity*100)
+	local roll = math.random(1,rarity*100)
 	if roll <= 100 then
-		if roll < 40 then -- 40% chance
+		if roll <= 48 then -- 48% chance
 			return egglist[math.random(1, 6)]
-		elseif roll < 90 then -- 50% chance
+		elseif roll <= 80 then -- 32% chance
 			return egglist[math.random(7, 9)]
-		elseif roll < 95 then -- 5% chance
+		elseif roll <= 96 then -- 16% chance
 			return egglist[math.random(10, 11)]
-		else -- 6% chance
+		else -- 4% chance
 			return egglist[math.random(12, 13)]
 		end
 	end
