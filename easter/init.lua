@@ -294,10 +294,13 @@ minetest.register_craftitem('easter:egg_striped', {
 			'This egg just set your Gravity to : '..random)
 		if random > 2 then
 			minetest.after(30, function()
-				user:set_physics_override({gravity = 1})
-				minetest.chat_send_player(user:get_player_name(),
-					'Wow, That egg was dangerous. '..
-					'We better put you back to normal before you implode.')
+				-- Check if gravity is still greater than 2 before 'fixing' it.
+				if user:get_physics_override().gravity > 2 then
+					user:set_physics_override({gravity = 1})
+					minetest.chat_send_player(user:get_player_name(),
+						'Wow, That egg was dangerous. '..
+						'We better put you back to normal before you implode.')
+				end
 			end)
 		end
 		itemstack:take_item()
