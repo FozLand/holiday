@@ -18,19 +18,23 @@ along with easter.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local egglist = {
-	'easter:egg_white', -- normal resets back to normal -- start common 1
-	'easter:egg_food', -- just food 2
-	'easter:egg_space', -- mb 3
-	'easter:egg_mario', -- mario jump 4
-	'easter:egg_speed', -- random speed variable 5
-	'easter:egg_checkered', -- common items -- end common list 6
-	'easter:egg_striped', -- random gravity -- uncommon 7
-	'easter:egg_zig_zag', -- random teleportation 8  
-	'easter:egg_night', -- make player see either night or day w/o changing server time -- end uncommon 9
-	'easter:egg_diamond', -- give semi rare things -- rare 10
-	'easter:egg_black', -- kill or heal -- end rare 11
-	'easter:egg_time', -- set server time to day -- superrare 12
-	'easter:egg_mese', -- grants rare blocks -- end superrare 13
+	-- common
+	'easter:egg_white',     --  1. resets back to normal
+	'easter:egg_food',      --  2. just food
+	'easter:egg_space',     --  3. mb
+	'easter:egg_mario',     --  4. mario jump
+	'easter:egg_speed',     --  5. random speed variable
+	'easter:egg_checkered', --  6. gives common items
+	-- uncommon
+	'easter:egg_striped',   --  7. random gravity
+	'easter:egg_zig_zag',   --  8. random teleportation
+	'easter:egg_night',     --  9. set player's light to night or day
+	-- rare
+	'easter:egg_diamond',   -- 10. gives semi rare things
+	'easter:egg_black',     -- 11. kill or heal
+	-- vary rare
+	'easter:egg_time',      -- 12. set server time to day
+	'easter:egg_mese',      -- 13. gives rare blocks
 }
 
 local randomegg = function()
@@ -46,7 +50,7 @@ local randomegg = function()
 	local roll = math.random(0,rarity*100)
 	if roll <= 100 then
 		if roll < 40 then -- 40% chance
-			return egglist[math.random(1, 7)]
+			return egglist[math.random(1, 6)]
 		elseif roll < 90 then -- 50% chance
 			return egglist[math.random(7, 9)]
 		elseif roll < 95 then -- 5% chance
@@ -288,15 +292,14 @@ minetest.register_craftitem('easter:egg_striped', {
 		user:set_physics_override({gravity = random})
 		minetest.chat_send_player(user:get_player_name(),
 			'This egg just set your Gravity to : '..random)
-		local normal = function(random)
-			if random > 2 then
+		if random > 2 then
+			minetest.after(30, function()
 				user:set_physics_override({gravity = 1})
 				minetest.chat_send_player(user:get_player_name(),
 					'Wow, That egg was dangerous. '..
-					'We better put you back to normal before you fly off or implode.')
-			end
+					'We better put you back to normal before you implode.')
+			end)
 		end
-		minetest.after(30, normal(random))
 		itemstack:take_item()
 		return itemstack
 	end
