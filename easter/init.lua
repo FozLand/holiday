@@ -63,15 +63,16 @@ end
 
 local hatch = function(itemstack, user, item, amount)
 	local inv = user:get_inventory()
+	local pname = user:get_player_name()
 	if inv:room_for_item('main', item..' '..amount) then
 		inv:add_item('main', item..' '..amount)
-		minetest.chat_send_player(user:get_player_name(),
-			'This egg just gave you '..amount..' '..item..'.')
+		minetest.chat_send_player(pname, 'This egg just gave you '..
+			amount..' '..item..'.')
 	else
 		minetest.item_drop(ItemStack(item..' '..amount), user, user:getpos())
 	end
-	minetest.log('action',user:get_player_name()..' hatched an '..
-		itemstack:get_name()..' into '..amount..' '..item..'.')
+	minetest.log('action',pname..' hatched an '..itemstack:get_name()..' into '..
+		amount..' '..item..'.')
 	itemstack:take_item()
 	return itemstack
 end
@@ -153,16 +154,14 @@ minetest.register_craftitem('easter:egg_black', {
 	groups = {not_in_creative_inventory = 1,},
 	-- black egg is dangerous and unpredictable
 	on_use = function(itemstack, user)
-		local playername = user:get_player_name()
+		local pname = user:get_player_name()
 		if math.random(0,1) == 1 then
 			user:set_hp(20)
-			minetest.chat_send_player(player_name, 'You have been healed.')
-			minetest.log('action',
-				playername..' was healed by an '..itemstack:get_name())
+			minetest.chat_send_player(pname, 'You have been healed.')
+			minetest.log('action', pname..' was healed by an '..itemstack:get_name())
 		else
 			minetest.after(0, function() user:set_hp(0) end)
-			minetest.log('action',
-				playername..' was killed by an '..itemstack:get_name())
+			minetest.log('action', pname..' was killed by an '..itemstack:get_name())
 		end
 		itemstack:take_item()
 		return itemstack
@@ -229,13 +228,12 @@ minetest.register_craftitem('easter:egg_speed', {
 			random = math.random(110,300)/100
 		end
 		user:set_physics_override({speed = random})
-		minetest.chat_send_player(user:get_player_name(),
-			'Your speed was set to : ' ..random..'.')
-		minetest.chat_send_player(user:get_player_name(),
-			'Alright, this one is like the flash, i guess. '..
-			'Unless your slow, then its like a snail.')
-		minetest.log('action', user:get_player_name()..'\'s speed was set to '..
-			random..' by an '..itemstack:get_name())
+		local pname = user:get_player_name()
+		minetest.chat_send_player(pname, 'Your speed was set to : ' ..random..'.')
+		minetest.chat_send_player(pname, 'Alright, this one is like the flash, '..
+			' i guess. Unless your slow, then its like a snail.')
+		minetest.log('action', pname..'\'s speed was set to '..random..' by an '..
+			itemstack:get_name())
 		itemstack:take_item()
 		return itemstack
 	end
@@ -248,10 +246,11 @@ minetest.register_craftitem('easter:egg_mario', {
 	--Mario
 	on_use = function(itemstack, user)
 		user:set_physics_override({jump = 1.7})
-		minetest.chat_send_player(user:get_player_name(),
+		local pname = user:get_player_name()
+		minetest.chat_send_player(pname,
 			'So this Egg makes you jump like Mario!. cool')
-		minetest.log('action', user:get_player_name()..'\'s jump was set to '..
-			'1.7 by an '..itemstack:get_name())
+		minetest.log('action', pname..'\'s jump was set to 1.7 by an '..
+			itemstack:get_name())
 		itemstack:take_item()
 		return itemstack
 	end
@@ -280,10 +279,10 @@ minetest.register_craftitem('easter:egg_space', {
 	-- space egg gives moon boots
 	on_use = function(itemstack, user)
 		user:set_physics_override({gravity = 0.165})
-		minetest.chat_send_player(user:get_player_name(),
-			'Wow! That egg gave you Moon Boots!')
-		minetest.log('action', user:get_player_name()..'\'s gravity was set to '..
-			'0.165 by an '..itemstack:get_name())
+		local pname = user:get_player_name()
+		minetest.chat_send_player(pname, 'Wow! That egg gave you Moon Boots!')
+		minetest.log('action', pname..'\'s gravity was set to 0.165 by an '..
+			itemstack:get_name())
 		itemstack:take_item()
 		return itemstack
 	end
@@ -303,23 +302,23 @@ minetest.register_craftitem('easter:egg_striped', {
 			random = math.random(110,1000)/100
 		end
 		user:set_physics_override({gravity = random})
-		minetest.chat_send_player(user:get_player_name(),
-			'This egg just set your Gravity to : '..random)
+		local pname = user:get_player_name()
+		minetest.chat_send_player(pname, 'This egg just set your Gravity to '..
+			random)
 		if random > 2 then
 			minetest.after(30, function()
 				-- Check if gravity is still greater than 2 before 'fixing' it.
 				if user:get_physics_override().gravity > 2 then
 					user:set_physics_override({gravity = 1})
-					minetest.chat_send_player(user:get_player_name(),
-						'Wow, That egg was dangerous. '..
+					minetest.chat_send_player(pname, 'Wow, That egg was dangerous. '..
 						'We better put you back to normal before you implode.')
-					minetest.log('action', user:get_player_name()..'\'s gravity was '..
-						'reset to 1 by an '..itemstack:get_name())
+					minetest.log('action', pname..'\'s gravity was reset to 1 by an '..
+						itemstack:get_name())
 				end
 			end)
 		end
-		minetest.log('action', user:get_player_name()..'\'s gravity was set to '..
-			random..' by an '..itemstack:get_name())
+		minetest.log('action', pname..'\'s gravity was set to '..random..' by an '..
+			itemstack:get_name())
 		itemstack:take_item()
 		return itemstack
 	end
@@ -332,10 +331,11 @@ minetest.register_craftitem('easter:egg_time', {
 	-- set day
 	on_use = function(itemstack, user)
 		minetest.set_timeofday(0.23)
-		minetest.chat_send_player(user:get_player_name(),
+		local pname = user:get_player_name()
+		minetest.chat_send_player(pname,
 			'This Egg must be magic! it made it Day Time!!!!')
-		minetest.log('action', user:get_player_name()..' set time of day using '..
-			'an '..itemstack:get_name())
+		minetest.log('action', pname..' set time of day using an '..
+			itemstack:get_name())
 		itemstack:take_item()
 		return itemstack
 	end
@@ -349,10 +349,9 @@ minetest.register_craftitem('easter:egg_white', {
 	on_use = function(itemstack, user)
 		user:set_physics_override(1, 1, 1)
 		user:override_day_night_ratio(nil)
-		minetest.chat_send_player(user:get_player_name(),
-			'This egg tastes Normal... like vanilla')
-		minetest.log('action', user:get_player_name()..' set to normal by an '..
-			itemstack:get_name())
+		local pname = user:get_player_name()
+		minetest.chat_send_player(pname, 'This egg tastes Normal... like vanilla')
+		minetest.log('action', pname..' set to normal by an '..itemstack:get_name())
 		minetest.do_item_eat(2,nil,itemstack,user)
 		return itemstack
 	end
@@ -364,14 +363,15 @@ minetest.register_craftitem('easter:egg_night', {
 	groups = {not_in_creative_inventory = 1,},
 	on_use = function(itemstack, user)
 		local light = (minetest.get_timeofday())
+		local pname = user:get_player_name()
 		if light < 0.2 or light > 0.8 then
 			user:override_day_night_ratio((1))
-			minetest.log('action', user:get_player_name()..'\'s day night ratio '..
-				'set to 1 by an '..itemstack:get_name())
+			minetest.log('action', pname..'\'s day night ratio set to 1 by an '..
+				itemstack:get_name())
 		else
 			user:override_day_night_ratio((0))
-			minetest.log('action', user:get_player_name()..'\'s day night ratio '..
-				'set to 0 by an '..itemstack:get_name())
+			minetest.log('action', pname..'\'s day night ratio set to 0 by an '..
+				itemstack:get_name())
 		end
 		itemstack:take_item()
 		return itemstack
