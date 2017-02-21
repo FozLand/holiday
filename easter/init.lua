@@ -130,6 +130,9 @@ local commontools ={
 	'default:shovel_steel',
 	'default:axe_steel',
 	'default:pick_steel',
+	'default:shovel_bronze',
+	'default:axe_bronze',
+	'default:pick_bronze',
 }
 
 local uncommontools = {
