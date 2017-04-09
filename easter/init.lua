@@ -311,7 +311,8 @@ minetest.register_craftitem('easter:egg_striped', {
 		if random > 2 then
 			minetest.after(30, function()
 				-- Check if gravity is still greater than 2 before 'fixing' it.
-				if user:get_physics_override().gravity > 2 then
+				local physics_override = user:get_physics_override()
+				if physics_override and physics_override.gravity > 2 then
 					user:set_physics_override({gravity = 1})
 					minetest.chat_send_player(pname, 'Wow, That egg was dangerous. '..
 						'We better put you back to normal before you implode.')
